@@ -1,12 +1,11 @@
 import Node from './node';
-import glMatrix from 'gl-matrix';
-const { mat4 } = glMatrix;
+import { Matrix4 } from './math';
 const PMATRIX = Symbol('pmatrix');
 
 export default class Camera extends Node {
   constructor(fov=45, aspect=1, near=0.01, far=20000) {
     super();
-    this[PMATRIX] = mat4.create();
+    this[PMATRIX] = new Matrix4();
     this.fov = fov;
     this.aspect = aspect;
     this.near = near;
@@ -20,7 +19,6 @@ export default class Camera extends Node {
   }
 
   updateProjectionMatrix() {
-    mat4.perspective(this[PMATRIX], this.fov, this.aspect, this.near, this.far);
-    return this[PMATRIX];
+    return this[PMATRIX].perspective(this.fov, this.aspect, this.near, this.far);
   }
 }

@@ -13,6 +13,14 @@ export default class Uniform extends Register {
   set(value) {
     const { gl, loc, type } = this;
 
+    // Check if this is a Math type of ours to extract
+    // the typed array data
+    if (value && (value.isVector || value.isMatrix)) {
+      // Continue setting values with the underlying
+      // TypedArray
+      value = value.getArray();
+    }
+
     switch (type) {
       case gl.INT:
         gl.uniform1i(loc, value);

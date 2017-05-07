@@ -1,6 +1,5 @@
-import glMatrix from 'gl-matrix';
+import { Matrix4 } from './math';
 import GLWrapper from './webgl';
-const { mat4 } = glMatrix;
 
 export default class Renderer {
   constructor(canvas) {
@@ -31,8 +30,8 @@ export default class Renderer {
     this.gl.setSize(canvas.width, canvas.height);
 
     // Temp matrices during render
-    this._mvMatrix = mat4.create();
-    this._mMatrix = mat4.create();
+    this._mvMatrix = new Matrix4();
+    this._mMatrix = new Matrix4();
   }
 
   getContext() {
@@ -55,8 +54,7 @@ export default class Renderer {
       const mMatrix = node.getMatrix();
 
       let mvMatrix = this._mvMatrix;
-      mat4.identity(mvMatrix);
-      mat4.multiply(mvMatrix, vMatrix, mMatrix);
+      Matrix4.multiply(mvMatrix.identity(), vMatrix, mMatrix);
 
       this.gl.draw(node.geometry, node.material, mMatrix, mvMatrix, pMatrix, vMatrix);
     }

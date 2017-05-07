@@ -18,21 +18,15 @@
             var cube = new MiniWebGL.Model(new MiniWebGL.Cube(), new MiniWebGL.BasicMaterial());
 
             scene.useCamera(camera);
-            cube.position = new Float32Array([0, 0.5, -3]);
-            cube.scale = new Float32Array([0.5, 0.5, 0.5]);
-            cube.updateMatrix();
+            cube.position.set(0, 0.5, -3);
+            cube.scale.set(0.5, 0.5, 0.5);
             scene.add(cube);
 
             var t = performance.now();
             function tick () {
                 t = performance.now();
-                cube.rotation[1] = Math.cos(
-                    t * 0.001
-                ) + Math.PI;
-                cube.rotation[0] = Math.sin(
-                    t * 0.001
-                ) + Math.PI;
-                cube.updateMatrix();
+                cube.rotation.setX(Math.sin(t * 0.001) + Math.PI);
+                cube.rotation.setY(Math.cos(t * 0.001) + Math.PI);
                 scene.render();
                 requestAnimationFrame(tick);
             }

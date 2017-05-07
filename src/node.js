@@ -1,5 +1,4 @@
-import glMatrix from 'gl-matrix';
-const { mat4, quat, vec3 } = glMatrix;
+import { Matrix4, Vector3 } from './math';
 const CHILDREN = Symbol('children');
 const MMATRIX = Symbol('mmatrix');
 let id = 0;
@@ -13,35 +12,31 @@ export default class Node {
     this.id = ++id;
     this[CHILDREN] = new Set();
 
-    this.position = vec3.create();
-    // Get vec3 form working before quat
-    // this.rotation = quat.create();
-    this.rotation = vec3.create();
-    this.scale = vec3.set(vec3.create(), 1, 1, 1);
-    this[MMATRIX] = mat4.create();
-    this.updateMatrix();
-  }
-
-  updateMatrix() {
-    mat4.identity(this[MMATRIX]);
-    mat4.translate(this[MMATRIX], this[MMATRIX], this.position);
-    mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[0], [1, 0, 0]);
-    mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[1], [0, 1, 0]);
-    mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[2], [0, 0, 1]);
-    mat4.scale(this[MMATRIX], this[MMATRIX], this.scale);
-
-    // Had trouble getting the below working with quaternions
-    // :( :( :(
-    /*
-    mat4.fromRotationTranslationScale(this[MMATRIX],
-                                      this.rotation,
-                                      this.position,
-                                      this.scale);
-    */
+    this.position = new Vector3(0, 0, 0);
+    this.rotation = new Vector3(0, 0, 0);
+    this.scale = new Vector3(1, 1, 1);
+    this[MMATRIX] = new Matrix4();
   }
 
   getMatrix() {
+    if (this.position.dirty ||
+        this.rotation.dirty ||
+        this.scale.dirty) {
+      this._updateMatrix();
+    }
     return this[MMATRIX];
+  }
+
+  _updateMatrix() {
+    const matrix = this[MMATRIX];
+    matrix.identity();
+    matrix.translate(this.position);
+    matrix.rotate(this.rotation);
+    matrix.scale(this.scale);
+    this.position.dirty =
+    this.rotation.dirty =
+    this.scale.dirty = false;
+    return this;
   }
 
   add(object) {

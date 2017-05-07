@@ -21,20 +21,16 @@
             );
 
             scene.useCamera(camera);
-            triangle.position = new Float32Array([0, 0.5, -3]);
-            triangle.scale = new Float32Array([0.5, 0.5, 0.5]);
-            triangle.updateMatrix();
+            triangle.position.set(0, 0.5, -3);
+            triangle.scale.set(0.5, 0.5, 0.5);
             scene.add(triangle);
 
             var t = performance.now();
             function tick () {
                 t = performance.now();
                 scene.render();
-                triangle.position[1] = Math.sin(t * 0.001);
-                triangle.rotation[2] = Math.cos(
-                    t * 0.01
-                ) + Math.PI;
-                triangle.updateMatrix();
+                triangle.position.set(undefined, Math.sin(t * 0.001));
+                triangle.rotation.set(undefined, undefined, Math.cos(t * 0.001) + Math.PI);
                 requestAnimationFrame(tick);
             }
             tick();

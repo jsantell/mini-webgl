@@ -24,6 +24,14 @@ export default class GLWrapper {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
   }
 
+  /**
+   * @param {Geometry} geometry
+   * @param {Material} material
+   * @param {Matrix4} mMatrix
+   * @param {Matrix4} mvMatrix
+   * @param {Matrix4} pMatrix
+   * @param {Matrix4} vMatrix
+   */
   draw(geometry, material, mMatrix, mvMatrix, pMatrix, vMatrix) {
     const gl = this.gl;
     const geoVertexBuffer = this.buffers.getBuffer(geometry.vertices);
