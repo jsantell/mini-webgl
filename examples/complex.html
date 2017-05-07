@@ -11,10 +11,11 @@
         <canvas></canvas>
         <script>
             var canvas = document.querySelector('canvas');
-            updateCanvasDimensions();
 
             var scene = new MiniWebGL.Scene(canvas);
             var camera = new MiniWebGL.Camera();
+
+            onResize();
             scene.useCamera(camera);
             camera.position[2] = 0;
             camera.updateMatrix();

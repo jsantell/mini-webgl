@@ -11,10 +11,10 @@
         <canvas></canvas>
         <script>
             var canvas = document.querySelector('canvas');
-            updateCanvasDimensions();
 
             var scene = new MiniWebGL.Scene(canvas);
             var camera = new MiniWebGL.Camera();
+            onResize();
             var cube = new MiniWebGL.Model(new MiniWebGL.Cube(), new MiniWebGL.BasicMaterial());
 
             scene.useCamera(camera);
