@@ -18,7 +18,7 @@ export default class GLWrapper {
   clear() {
     const { gl } = this;
 
-    gl.clearColor(0, 0, 0, 1);
+    gl.clearColor(0.2, 0.2, 0.2, 1);
     gl.enable(gl.DEPTH_TEST);
     gl.viewport(0, 0, this.width, this.height);
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);

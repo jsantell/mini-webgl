@@ -4,7 +4,7 @@ const { mat4 } = glMatrix;
 const PMATRIX = Symbol('pmatrix');
 
 export default class Camera extends Node {
-  constructor(fov=45, aspect=1, near=0.1, far=2000) {
+  constructor(fov=45, aspect=1, near=0.01, far=20000) {
     super();
     this[PMATRIX] = mat4.create();
     this.fov = fov;

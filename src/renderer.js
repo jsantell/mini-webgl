@@ -4,11 +4,11 @@ const { mat4 } = glMatrix;
 
 export default class Renderer {
   constructor(canvas) {
-    let ctx = canvas.getContext('webgl');
+    let ctx = this.ctx = canvas.getContext('webgl');
 
     // Use debugging utils if included
     // https://www.khronos.org/webgl/wiki/Debugging
-    if (window.WebGLDebugUtils) {
+    if (false && window.WebGLDebugUtils) {
       ctx = WebGLDebugUtils.makeDebugContext(
         ctx,
         undefined,
@@ -33,6 +33,10 @@ export default class Renderer {
     // Temp matrices during render
     this._mvMatrix = mat4.create();
     this._mMatrix = mat4.create();
+  }
+
+  getContext() {
+    return this.ctx;
   }
 
   setSize(width, height) {
