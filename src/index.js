@@ -1,3 +1,4 @@
+import assert from 'assert';
 import Renderer from './renderer';
 import Camera from './camera';
 import Scene from './scene';
@@ -8,6 +9,7 @@ import Triangle from './geometries/triangle';
 import Cube from './geometries/cube';
 
 export {
+  assert,
   Math,
   Renderer,
   Camera,

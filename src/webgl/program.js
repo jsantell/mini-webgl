@@ -9,15 +9,16 @@ const FS = Symbol('fs');
 export default class Program {
   /**
    * @param {WebGLRenderingContext} gl
-   * @param {GLBuffers} buffers
    * @param {String} vertSrc
    * @param {String} fragSrc
    */
-  constructor(gl, buffers, vertSrc, fragSrc) {
+  constructor(gl, vertSrc, fragSrc) {
     this.gl = gl;
-    this.buffers = buffers;
 
     this[PROGRAM] = gl.createProgram();
+
+    this.vertSrc = vertSrc;
+    this.fragSrc = fragSrc;
 
     this[VS] = this._createShader(vertSrc, gl.VERTEX_SHADER);
     this[FS] = this._createShader(fragSrc, gl.FRAGMENT_SHADER);
@@ -33,6 +34,14 @@ export default class Program {
 
   use() {
     this.gl.useProgram(this[PROGRAM]);
+  }
+
+  getVertexSource() {
+    return this.vertSrc;
+  }
+
+  getFragmentSource() {
+    return this.fragSrc;
   }
 
   setUniform(name, value) {

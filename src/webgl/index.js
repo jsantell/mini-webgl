@@ -1,11 +1,11 @@
-import Program from './program';
+import Programs from './programs';
 import GLBuffers from './gl-buffers';
 
 export default class GLWrapper {
   constructor(gl, width, height) {
     this.gl = gl;
     this.buffers = new GLBuffers(gl);
-    this.programs = new Map();
+    this.programs = new Programs(gl);
     this.width = width;
     this.height = height;
   }
@@ -42,12 +42,9 @@ export default class GLWrapper {
 
     // Get the Program abstraction associated with this material,
     // or create one, which handles the compiling/linking of
-    // shaders and setting up of uniforms
-    let program = this.programs.get(material);
-    if (!program) {
-      program = new Program(this.gl, this.buffers, material.getVertexSource(), material.getFragmentSource());
-      this.programs.set(material, program);
-    }
+    // shaders and setting up of uniforms. Reuses programs even if Material
+    // instances are not identical based off of frag/vert source.
+    let program = this.programs.getProgram(material);
 
     // Start using this program for all future calls
     program.use();
