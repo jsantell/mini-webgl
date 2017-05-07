@@ -5,7 +5,7 @@ Mini toy WebGL library
 For educational purposes. **Do not use this library.**
 This is a barebones, unoptimized abstraction around WebGL. API ideas inspired by THREE.js.
 
-![mini-webgl](https://jsantell.github.io/mini-webgl/assets/screenshot.gif);
+![mini-webgl](https://jsantell.github.io/mini-webgl/assets/screenshot.gif)
 
 ## Example
 
