@@ -2,10 +2,10 @@
 <html>
     <head>
         <title></title>
-        <meta name="description" content="Mini">
+        <meta name="description" content="MiniWebGL">
         <style>body, canvas { width: 100%; height: 100%; padding: 0; margin: 0; }</style>
         <script src="../vendor/webgl-debug.js"></script>
-        <script src="../dist/mini3d.js"></script>
+        <script src="../dist/mini-webgl.js"></script>
     </head>
     <body>
         <canvas></canvas>
@@ -13,9 +13,12 @@
             var canvas = document.querySelector('canvas');
             updateCanvasDimensions();
 
-            var scene = new Mini.Scene(canvas);
-            var camera = new Mini.Camera();
-            var triangle = new Mini.Model(new Mini.Triangle(), new Mini.BasicMaterial());
+            var scene = new MiniWebGL.Scene(canvas);
+            var camera = new MiniWebGL.Camera();
+            var triangle = new MiniWebGL.Model(
+                new MiniWebGL.Triangle(),
+                new MiniWebGL.BasicMaterial()
+            );
 
             scene.useCamera(camera);
             triangle.position = new Float32Array([0, 0.5, -3]);

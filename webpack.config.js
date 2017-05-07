@@ -5,9 +5,9 @@ module.exports = {
   entry: './src/index.js',
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'mini3d.js',
+    filename: 'mini-webgl.js',
     libraryTarget: 'var',
-    library: 'Mini',
+    library: 'MiniWebGL',
   },
   module: {
     rules: [

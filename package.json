@@ -1,13 +1,16 @@
 {
-  "name": "mini3d",
+  "name": "mini-webgl",
   "version": "1.0.0",
-  "description": "",
+  "description": "Mini toy WebGL library",
   "main": "index.js",
   "scripts": {
-    "build": "webpack",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack"
   },
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jsantell/mini-webgl.git"
+  },
+  "author": "Jordan Santell <jordan@jsantell.com>",
   "license": "MIT",
   "devDependencies": {
     "babel-core": "^6.18.2",
@@ -18,8 +21,7 @@
     "babel-preset-es2017": "^6.16.0",
     "glslify-loader": "^1.0.2",
     "raw-loader": "^0.5.1",
-    "webpack": "^2.5.0",
-    "webpack-dev-server": "^2.4.5"
+    "webpack": "^2.5.0"
   },
   "dependencies": {
     "gl-matrix": "^2.3.2"
