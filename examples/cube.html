@@ -14,19 +14,67 @@
 
             var scene = new MiniWebGL.Scene(canvas);
             var camera = new MiniWebGL.Camera();
-            onResize();
-            var cube = new MiniWebGL.Model(new MiniWebGL.Cube(), new MiniWebGL.BasicMaterial());
+            var rootCube = new MiniWebGL.Model(
+                new MiniWebGL.Cube(),
+                new MiniWebGL.BasicMaterial()
+            );
+            camera.position.setZ(-20);
+            rootCube.position.setZ(-3);
+            scene.add(rootCube);
 
+            var gl = scene.renderer.getContext();
+            gl.enable( gl.BLEND );
+            gl.blendEquation( gl.FUNC_ADD );
+            gl.blendFunc( gl.SRC_COLOR, gl.ONE);
+            onResize();
+
+            var cubes = [];
+            var cubeCount = 200;
+            var radius = 8;
+            var scale = 3;
+            for (let i = 0; i < cubeCount; i++) {
+                var pos = i / cubeCount;
+                var radiusPos = pos * Math.PI * 2;
+                var x = 0 + radius * Math.cos(radiusPos);
+                var y = 0 + radius * Math.sin(radiusPos);
+                var cube = new MiniWebGL.Model(
+                    new MiniWebGL.Cube(),
+                    new MiniWebGL.BasicMaterial({
+                        color: new MiniWebGL.Math.Vector4(pos, 1 - pos, 1 - pos, 0.5),
+                    })
+                );
+                cube.position.set(x, y, i);
+                cube.scale.set(scale, scale, scale);
+                rootCube.add(cube);
+                cubes.push(cube);
+            }
             scene.useCamera(camera);
-            cube.position.set(0, 0.5, -3);
-            cube.scale.set(0.5, 0.5, 0.5);
-            scene.add(cube);
 
             var t = performance.now();
             function tick () {
                 t = performance.now();
-                cube.rotation.setX(Math.sin(t * 0.001) + Math.PI);
-                cube.rotation.setY(Math.cos(t * 0.001) + Math.PI);
+                rootCube.rotation.set(
+                    0,
+                    (t * 0.0005) % (Math.PI * 2),
+                    0
+                );
+
+                for (let i = 0; i < cubeCount; i++) {
+                    cubes[i].rotation.set(
+                        Math.sin(t * 0.0001) + Math.PI,
+                        Math.cos(t * 0.0001) + Math.PI,
+                        Math.sin(t * 0.001) + Math.PI
+                    );
+                    var pos = i / cubeCount;
+                    var radiusPos = ((pos * Math.PI * 2) + (t * 0.0005)) % (Math.PI * 2);
+                    var x = 0 + radius * Math.cos(radiusPos);
+                    var y = 0 + radius * Math.sin(radiusPos);
+                    cubes[i].position.set(
+                        x - Math.sin(y),
+                        y*x,
+                        Math.abs(0.5 * x + y)
+                    );
+                }
                 scene.render();
                 requestAnimationFrame(tick);
             }

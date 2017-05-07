@@ -45,18 +45,34 @@ export default class Renderer {
   render(scene, camera) {
     const { gl } = this;
     const pMatrix = camera.getPerspectiveMatrix();
-    const vMatrix = camera.getMatrix();
+    const vMatrix = camera.getWorldMatrix();
 
     // Clear out the canvas
     gl.clear();
 
-    for (const node of scene.getChildren()) {
-      const mMatrix = node.getMatrix();
+    const queue = [scene];
 
+    while (queue.length) {
+      const node = queue.shift();
+
+      // Get and construct our model and model view matrices
+      const mMatrix = node.getWorldMatrix();
       let mvMatrix = this._mvMatrix;
       Matrix4.multiply(mvMatrix.identity(), vMatrix, mMatrix);
 
-      this.gl.draw(node.geometry, node.material, mMatrix, mvMatrix, pMatrix, vMatrix);
+      // If we have a model, pass it to the GLWrapper
+      // to draw
+      if (node.isModel) {
+        this.gl.draw(node.geometry, node.material, mMatrix, mvMatrix, pMatrix, vMatrix);
+      }
+
+      // If this node has children, push them into the queue
+      if (node.hasChildren()) {
+        const children = node.getChildren();
+        for (let child of children) {
+          queue.push(child);
+        }
+      }
     }
   }
 }

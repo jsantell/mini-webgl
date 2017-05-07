@@ -5,5 +5,6 @@ export default class Model extends Node {
     super();
     this.geometry = geometry;
     this.material = material;
+    this.isModel = true;
   }
 }

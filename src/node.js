@@ -1,6 +1,9 @@
+import assert from 'assert';
 import { Matrix4, Vector3 } from './math';
 const CHILDREN = Symbol('children');
-const MMATRIX = Symbol('mmatrix');
+const LMATRIX = Symbol('lmatrix');
+const WMATRIX = Symbol('wmatrix');
+const PARENT = Symbol('parent');
 let id = 0;
 
 /**
@@ -15,20 +18,40 @@ export default class Node {
     this.position = new Vector3(0, 0, 0);
     this.rotation = new Vector3(0, 0, 0);
     this.scale = new Vector3(1, 1, 1);
-    this[MMATRIX] = new Matrix4();
+    this[LMATRIX] = new Matrix4();
+    this[WMATRIX] = new Matrix4();
+    this[PARENT] = null;
   }
 
-  getMatrix() {
+  /**
+   * Get the model matrix of this node in world coordinates.
+   * If this node has no parent in the scene graph, then the
+   * world matrix is the same as the local matrix.
+   */
+  getWorldMatrix() {
+    if (this[PARENT] === null) {
+      return this.getLocalMatrix();
+    }
+
+    Matrix4.multiply(this[WMATRIX].identity(),
+                     this[PARENT].getWorldMatrix(),
+                     this.getLocalMatrix()
+                     );
+
+    return this[WMATRIX];
+  }
+
+  getLocalMatrix() {
     if (this.position.dirty ||
         this.rotation.dirty ||
         this.scale.dirty) {
-      this._updateMatrix();
+      this._updateLocalMatrix();
     }
-    return this[MMATRIX];
+    return this[LMATRIX];
   }
 
-  _updateMatrix() {
-    const matrix = this[MMATRIX];
+  _updateLocalMatrix() {
+    const matrix = this[LMATRIX];
     matrix.identity();
     matrix.translate(this.position);
     matrix.rotate(this.rotation);
@@ -40,29 +63,22 @@ export default class Node {
   }
 
   add(object) {
-    // Not yet implementing mapping local space
-    // to world space based on ancestry in scene graph
-    if (!this.useCamera) {
-      throw new Error('not yet implemented');
-    }
+    assert(object instanceof Node, 'Only Nodes may be added to scene graph');
+    object[PARENT] = this;
     this[CHILDREN].add(object);
   }
 
   remove(object) {
-    // Not yet implementing mapping local space
-    // to world space based on ancestry in scene graph
-    if (!this.useCamera) {
-      throw new Error('not yet implemented');
-    }
+    assert(object instanceof Node, 'Only Nodes may be removed from the scene graph');
+    object[PARENT] = null;
     this[CHILDREN].delete(object);
   }
 
   getChildren() {
-    // Not yet implementing mapping local space
-    // to world space based on ancestry in scene graph
-    if (!this.useCamera) {
-      throw new Error('not yet implemented');
-    }
     return this[CHILDREN].values();
+  }
+
+  hasChildren() {
+    return this[CHILDREN].size !== 0;
   }
 }
