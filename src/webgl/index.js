@@ -26,7 +26,11 @@ export default class GLWrapper {
 
   draw(geometry, material, mMatrix, mvMatrix, pMatrix, vMatrix) {
     const gl = this.gl;
-    const geoBuffer = this.buffers.getBuffer(geometry.vertices);
+    const geoVertexBuffer = this.buffers.getBuffer(geometry.vertices);
+    let geoIndicesBuffer;
+    if (geometry.indices) {
+      geoIndicesBuffer = this.buffers.getBuffer(geometry.indices);
+    }
 
     // Get the Program abstraction associated with this material,
     // or create one, which handles the compiling/linking of
@@ -64,7 +68,7 @@ export default class GLWrapper {
           break;
       }
     }
-    
+
     for (let attribName of Object.keys(program.attributes)) {
       const attribute = program.attributes[attribName];
 
@@ -72,16 +76,21 @@ export default class GLWrapper {
       // set it; otherwise, it's probably user-driven
       switch (attribute.name) {
         case 'position':
-          attribute.set(geoBuffer, geometry.size);
+          attribute.set(geoVertexBuffer, geometry.vertices.getSize());
           break;
         default:
-          const value = material.attributes[attribute.name];
-          const buffer = this.buffers.getBuffer(value);
-          attribute.set(buffer, 4); // TODO don' thardcode this
+          const bufferAttr = material.attributes[attribute.name];
+          const buffer = this.buffers.getBuffer(bufferAttr);
+          attribute.set(buffer, bufferAttr.getSize());
           break;
       }
     }
 
-    this.gl.drawArrays(this.gl.TRIANGLES, 0, geometry.count);
+    if (geoIndicesBuffer) {
+      this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, geoIndicesBuffer);
+      this.gl.drawElements(this.gl.TRIANGLES, geometry.indices.getCount(), gl.UNSIGNED_SHORT, 0);
+    } else {
+      this.gl.drawArrays(this.gl.TRIANGLES, 0, geometry.vertices.getCount());
+    }
   }
 }

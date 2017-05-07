@@ -1,10 +1,8 @@
 import assert from 'assert';
 
 export default class Geometry {
-  constructor(vertices, size, count) {
+  constructor(vertices, indices) {
     this.vertices = vertices;
-    this.count = count;
-    this.size = size;
-    assert(vertices.length === (count * size));
+    this.indices = indices;
   }
 }
