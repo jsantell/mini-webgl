@@ -33,17 +33,17 @@ This is a barebones, unoptimized abstraction around WebGL. API ideas inspired by
   );
 
   scene.useCamera(camera);
-  cube.position = new Float32Array([0, 0.5, -3]);
-  cube.scale = new Float32Array([0.5, 0.5, 0.5]);
-  cube.updateMatrix();
+  cube.position.set(0, 0.5, -3);
+  cube.scale.set(0.5, 0.5, 0.5);
   scene.add(cube);
 
-  var t;
+  var t, x, y, z = 0;
   function tick () {
     t = performance.now();
-    cube.rotation[0] = Math.cos(t * 0.001) + Math.PI;
-    cube.rotation[1] = Math.sin(t * 0.001) + Math.PI;
-    cube.updateMatrix();
+    x = Math.cos(t * 0.001) + Math.PI;
+    y = Math.sin(t * 0.001) + Math.PI;
+    cube.rotation.set(x, y, z);
+    cube.material.uniforms.color.setX(Math.abs(Math.sin(t * 0.001)));
     scene.render();
     requestAnimationFrame(tick);
   }
