@@ -13,7 +13,7 @@
             var canvas = document.querySelector('canvas');
 
             var scene = new MiniWebGL.Scene(canvas);
-            var camera = new MiniWebGL.Camera();
+            var camera = new MiniWebGL.Camera(45, window.innerWidth/window.innerHeight, 1, 10000);
             var rootCube = new MiniWebGL.Model(
                 new MiniWebGL.Cube(),
                 new MiniWebGL.BasicMaterial()
@@ -29,7 +29,7 @@
             onResize();
 
             var cubes = [];
-            var cubeCount = 200;
+            var cubeCount = 20;
             var radius = 8;
             var scale = 3;
             for (let i = 0; i < cubeCount; i++) {
@@ -40,7 +40,7 @@
                 var cube = new MiniWebGL.Model(
                     new MiniWebGL.Cube(),
                     new MiniWebGL.BasicMaterial({
-                        color: new MiniWebGL.Math.Vector4(pos, 1 - pos, 1 - pos, 0.5),
+                        // color: new MiniWebGL.Math.Vector4(pos, 1 - pos, 1 - pos, 0.5),
                     })
                 );
                 cube.position.set(x, y, i);
@@ -50,30 +50,34 @@
             }
             scene.useCamera(camera);
 
-            var t = performance.now();
+            var t = 0;
             function tick () {
-                t = performance.now();
+                t++;
                 rootCube.rotation.set(
-                    0,
-                    (t * 0.0005) % (Math.PI * 2),
+                    (t * 0.005) % (Math.PI * 2),
+                    (t * 0.001) % (Math.PI * 2),
                     0
                 );
 
                 for (let i = 0; i < cubeCount; i++) {
                     cubes[i].rotation.set(
                         Math.sin(t * 0.0001) + Math.PI,
-                        Math.cos(t * 0.0001) + Math.PI,
+                        Math.cos(t * 0.001) + Math.PI,
                         Math.sin(t * 0.001) + Math.PI
                     );
                     var pos = i / cubeCount;
-                    var radiusPos = ((pos * Math.PI * 2) + (t * 0.0005)) % (Math.PI * 2);
+                    var radiusPos = ((pos * Math.PI * 2) + (t * 0.005)) % (Math.PI * 2);
                     var x = 0 + radius * Math.cos(radiusPos);
                     var y = 0 + radius * Math.sin(radiusPos);
                     cubes[i].position.set(
-                        x - Math.sin(y),
+                        x - Math.sin(y) * 5,
                         y*x,
-                        Math.abs(0.5 * x + y)
+                        x
                     );
+                    var r = (Math.sin(t * 0.01 * i) + 1) / 2;
+                    var g = (Math.sin((t * 0.01 * i) + 2) + 1) / 2;
+                    var b = (Math.sin((t * 0.01 * i) + 10) + 1) / 2;
+                    cubes[i].material.uniforms.color.set(r, g, b, 1);
                 }
                 scene.render();
                 requestAnimationFrame(tick);
