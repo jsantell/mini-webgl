@@ -12,7 +12,7 @@ const createDefaultAttributes = () => {
 // supplying its own uniform Vector.
 const createDefaultUniforms = () => {
   return {
-    color: new Vector4(0, 1, 0, 1),
+    color: new Vector4(1, 1, 1, 1),
   }
 };
 
