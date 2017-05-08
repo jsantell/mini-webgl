@@ -216,7 +216,7 @@ function isBuffer(b) {
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var util = __webpack_require__(37);
+var util = __webpack_require__(38);
 var hasOwn = Object.prototype.hasOwnProperty;
 var pSlice = Array.prototype.slice;
 var functionsHaveNames = (function () {
@@ -645,43 +645,287 @@ var objectKeys = Object.keys || function (obj) {
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/**
- * @fileoverview gl-matrix - High performance matrix and vector operations
- * @author Brandon Jones
- * @author Colin MacKenzie IV
- * @version 2.3.2
- */
+"use strict";
 
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.Matrix4 = exports.Matrix3 = exports.Matrix2 = exports.Matrix = exports.Vector4 = exports.Vector3 = exports.Vector2 = undefined;
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-// END HEADER
+var _assert = __webpack_require__(1);
 
-exports.glMatrix = __webpack_require__(0);
-exports.mat2 = __webpack_require__(25);
-exports.mat2d = __webpack_require__(26);
-exports.mat3 = __webpack_require__(9);
-exports.mat4 = __webpack_require__(27);
-exports.quat = __webpack_require__(28);
-exports.vec2 = __webpack_require__(29);
-exports.vec3 = __webpack_require__(10);
-exports.vec4 = __webpack_require__(11);
+var _assert2 = _interopRequireDefault(_assert);
+
+var _glMatrix = __webpack_require__(25);
+
+var _glMatrix2 = _interopRequireDefault(_glMatrix);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var vec2 = _glMatrix2.default.vec2,
+    vec3 = _glMatrix2.default.vec3,
+    vec4 = _glMatrix2.default.vec4,
+    mat2 = _glMatrix2.default.mat2,
+    mat3 = _glMatrix2.default.mat3,
+    mat4 = _glMatrix2.default.mat4;
+
+
+var X_SCALAR = [1, 0, 0];
+var Y_SCALAR = [0, 1, 0];
+var Z_SCALAR = [0, 0, 1];
+
+var Vector = function () {
+  function Vector(size, x, y, w, z) {
+    _classCallCheck(this, Vector);
+
+    this.size = size;
+    switch (this.size) {
+      case 2:
+        this.mathBase = vec2;
+        break;
+      case 3:
+        this.mathBase = vec3;
+        break;
+      case 4:
+        this.mathBase = vec4;
+        break;
+      default:
+        throw new Error('unknown size');
+    }
+    this.data = this.mathBase.create();
+    this.set(x, y, w, z);
+    this.dirty = true;
+    this.isVector = true;
+  }
+
+  _createClass(Vector, [{
+    key: 'getArray',
+    value: function getArray() {
+      return this.data;
+    }
+  }, {
+    key: 'identity',
+    value: function identity() {
+      this.mathBase.identity(this.data);
+      return this;
+    }
+  }, {
+    key: 'set',
+    value: function set(x, y, z, w) {
+      if (x !== undefined) this._setIndex(0, x);
+      if (y !== undefined) this._setIndex(1, y);
+      if (z !== undefined) this._setIndex(2, z);
+      if (w !== undefined) this._setIndex(3, w);
+    }
+  }, {
+    key: 'getX',
+    value: function getX() {
+      return this._getIndex(0);
+    }
+  }, {
+    key: 'getY',
+    value: function getY() {
+      return this._getIndex(1);
+    }
+  }, {
+    key: 'getZ',
+    value: function getZ() {
+      return this._getIndex(2);
+    }
+  }, {
+    key: 'getW',
+    value: function getW() {
+      return this._getIndex(3);
+    }
+  }, {
+    key: 'setX',
+    value: function setX(v) {
+      return this._setIndex(0, v);
+    }
+  }, {
+    key: 'setY',
+    value: function setY(v) {
+      return this._setIndex(1, v);
+    }
+  }, {
+    key: 'setZ',
+    value: function setZ(v) {
+      return this._setIndex(2, v);
+    }
+  }, {
+    key: 'setW',
+    value: function setW(v) {
+      return this._setIndex(3, v);
+    }
+  }, {
+    key: '_getIndex',
+    value: function _getIndex(i) {
+      (0, _assert2.default)(this.size > i);
+      return this.data[i];
+    }
+  }, {
+    key: '_setIndex',
+    value: function _setIndex(i, value) {
+      (0, _assert2.default)(this.size > i);
+      this.data[i] = value;
+      this.dirty = true;
+    }
+  }]);
+
+  return Vector;
+}();
+
+var Vector2 = exports.Vector2 = function (_Vector) {
+  _inherits(Vector2, _Vector);
+
+  function Vector2(x, y) {
+    _classCallCheck(this, Vector2);
+
+    return _possibleConstructorReturn(this, (Vector2.__proto__ || Object.getPrototypeOf(Vector2)).call(this, 2, x, y));
+  }
+
+  return Vector2;
+}(Vector);
+
+var Vector3 = exports.Vector3 = function (_Vector2) {
+  _inherits(Vector3, _Vector2);
+
+  function Vector3(x, y, z) {
+    _classCallCheck(this, Vector3);
+
+    return _possibleConstructorReturn(this, (Vector3.__proto__ || Object.getPrototypeOf(Vector3)).call(this, 3, x, y, z));
+  }
+
+  return Vector3;
+}(Vector);
+
+var Vector4 = exports.Vector4 = function (_Vector3) {
+  _inherits(Vector4, _Vector3);
+
+  function Vector4(x, y, z, w) {
+    _classCallCheck(this, Vector4);
+
+    return _possibleConstructorReturn(this, (Vector4.__proto__ || Object.getPrototypeOf(Vector4)).call(this, 4, x, y, z, w));
+  }
+
+  return Vector4;
+}(Vector);
+
+var Matrix = exports.Matrix = function () {
+  function Matrix(size) {
+    _classCallCheck(this, Matrix);
+
+    this.size = size;
+    switch (this.size) {
+      case 2:
+        this.mathBase = mat2;
+        break;
+      case 3:
+        this.mathBase = mat3;
+        break;
+      case 4:
+        this.mathBase = mat4;
+        break;
+      default:
+        throw new Error('unknown size');
+    }
+
+    this.data = this.mathBase.create();
+    this.isMatrix = true;
+  }
+
+  _createClass(Matrix, [{
+    key: 'getArray',
+    value: function getArray() {
+      return this.data;
+    }
+  }, {
+    key: 'identity',
+    value: function identity() {
+      this.mathBase.identity(this.data);
+      return this;
+    }
+  }, {
+    key: 'translate',
+    value: function translate(vec3) {
+      this.mathBase.translate(this.data, this.data, vec3.getArray());
+    }
+  }, {
+    key: 'rotate',
+    value: function rotate(vec3) {
+      var rArray = vec3.getArray();
+      this.mathBase.rotate(this.data, this.data, rArray[0], X_SCALAR);
+      this.mathBase.rotate(this.data, this.data, rArray[1], Y_SCALAR);
+      this.mathBase.rotate(this.data, this.data, rArray[2], Z_SCALAR);
+    }
+  }, {
+    key: 'scale',
+    value: function scale(vec3) {
+      this.mathBase.scale(this.data, this.data, vec3.getArray());
+    }
+  }]);
+
+  return Matrix;
+}();
+
+var Matrix2 = exports.Matrix2 = function (_Matrix) {
+  _inherits(Matrix2, _Matrix);
+
+  function Matrix2() {
+    _classCallCheck(this, Matrix2);
+
+    return _possibleConstructorReturn(this, (Matrix2.__proto__ || Object.getPrototypeOf(Matrix2)).call(this, 2));
+  }
+
+  return Matrix2;
+}(Matrix);
+
+var Matrix3 = exports.Matrix3 = function (_Matrix2) {
+  _inherits(Matrix3, _Matrix2);
+
+  function Matrix3() {
+    _classCallCheck(this, Matrix3);
+
+    return _possibleConstructorReturn(this, (Matrix3.__proto__ || Object.getPrototypeOf(Matrix3)).call(this, 3));
+  }
+
+  return Matrix3;
+}(Matrix);
+
+var Matrix4 = exports.Matrix4 = function (_Matrix3) {
+  _inherits(Matrix4, _Matrix3);
+
+  function Matrix4() {
+    _classCallCheck(this, Matrix4);
+
+    return _possibleConstructorReturn(this, (Matrix4.__proto__ || Object.getPrototypeOf(Matrix4)).call(this, 4));
+  }
+
+  _createClass(Matrix4, [{
+    key: 'perspective',
+    value: function perspective(fov, aspect, near, far) {
+      mat4.perspective(this.data, fov, aspect, near, far);
+      return this;
+    }
+  }], [{
+    key: 'multiply',
+    value: function multiply(out, a, b) {
+      mat4.multiply(out.getArray(), a.getArray(), b.getArray());
+      return out;
+    }
+  }]);
+
+  return Matrix4;
+}(Matrix);
 
 /***/ }),
 /* 3 */
@@ -696,20 +940,20 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _glMatrix = __webpack_require__(2);
+var _assert = __webpack_require__(1);
 
-var _glMatrix2 = _interopRequireDefault(_glMatrix);
+var _assert2 = _interopRequireDefault(_assert);
+
+var _math = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var mat4 = _glMatrix2.default.mat4,
-    quat = _glMatrix2.default.quat,
-    vec3 = _glMatrix2.default.vec3;
-
 var CHILDREN = Symbol('children');
-var MMATRIX = Symbol('mmatrix');
+var LMATRIX = Symbol('lmatrix');
+var WMATRIX = Symbol('wmatrix');
+var PARENT = Symbol('parent');
 var id = 0;
 
 /**
@@ -724,68 +968,74 @@ var Node = function () {
     this.id = ++id;
     this[CHILDREN] = new Set();
 
-    this.position = vec3.create();
-    // Get vec3 form working before quat
-    // this.rotation = quat.create();
-    this.rotation = vec3.create();
-    this.scale = vec3.set(vec3.create(), 1, 1, 1);
-    this[MMATRIX] = mat4.create();
-    this.updateMatrix();
+    this.position = new _math.Vector3(0, 0, 0);
+    this.rotation = new _math.Vector3(0, 0, 0);
+    this.scale = new _math.Vector3(1, 1, 1);
+    this[LMATRIX] = new _math.Matrix4();
+    this[WMATRIX] = new _math.Matrix4();
+    this[PARENT] = null;
   }
 
-  _createClass(Node, [{
-    key: 'updateMatrix',
-    value: function updateMatrix() {
-      mat4.identity(this[MMATRIX]);
-      mat4.translate(this[MMATRIX], this[MMATRIX], this.position);
-      mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[0], [1, 0, 0]);
-      mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[1], [0, 1, 0]);
-      mat4.rotate(this[MMATRIX], this[MMATRIX], this.rotation[2], [0, 0, 1]);
-      mat4.scale(this[MMATRIX], this[MMATRIX], this.scale);
+  /**
+   * Get the model matrix of this node in world coordinates.
+   * If this node has no parent in the scene graph, then the
+   * world matrix is the same as the local matrix.
+   */
 
-      // Had trouble getting the below working with quaternions
-      // :( :( :(
-      /*
-      mat4.fromRotationTranslationScale(this[MMATRIX],
-                                        this.rotation,
-                                        this.position,
-                                        this.scale);
-      */
+
+  _createClass(Node, [{
+    key: 'getWorldMatrix',
+    value: function getWorldMatrix() {
+      if (this[PARENT] === null) {
+        return this.getLocalMatrix();
+      }
+
+      _math.Matrix4.multiply(this[WMATRIX].identity(), this[PARENT].getWorldMatrix(), this.getLocalMatrix());
+
+      return this[WMATRIX];
     }
   }, {
-    key: 'getMatrix',
-    value: function getMatrix() {
-      return this[MMATRIX];
+    key: 'getLocalMatrix',
+    value: function getLocalMatrix() {
+      if (this.position.dirty || this.rotation.dirty || this.scale.dirty) {
+        this._updateLocalMatrix();
+      }
+      return this[LMATRIX];
+    }
+  }, {
+    key: '_updateLocalMatrix',
+    value: function _updateLocalMatrix() {
+      var matrix = this[LMATRIX];
+      matrix.identity();
+      matrix.translate(this.position);
+      matrix.rotate(this.rotation);
+      matrix.scale(this.scale);
+      this.position.dirty = this.rotation.dirty = this.scale.dirty = false;
+      return this;
     }
   }, {
     key: 'add',
     value: function add(object) {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!this.useCamera) {
-        throw new Error('not yet implemented');
-      }
+      (0, _assert2.default)(object instanceof Node, 'Only Nodes may be added to scene graph');
+      object[PARENT] = this;
       this[CHILDREN].add(object);
     }
   }, {
     key: 'remove',
     value: function remove(object) {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!this.useCamera) {
-        throw new Error('not yet implemented');
-      }
+      (0, _assert2.default)(object instanceof Node, 'Only Nodes may be removed from the scene graph');
+      object[PARENT] = null;
       this[CHILDREN].delete(object);
     }
   }, {
     key: 'getChildren',
     value: function getChildren() {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!this.useCamera) {
-        throw new Error('not yet implemented');
-      }
       return this[CHILDREN].values();
+    }
+  }, {
+    key: 'hasChildren',
+    value: function hasChildren() {
+      return this[CHILDREN].size !== 0;
     }
   }]);
 
@@ -811,9 +1061,7 @@ var _node = __webpack_require__(3);
 
 var _node2 = _interopRequireDefault(_node);
 
-var _glMatrix = __webpack_require__(2);
-
-var _glMatrix2 = _interopRequireDefault(_glMatrix);
+var _math = __webpack_require__(2);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -822,8 +1070,6 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var mat4 = _glMatrix2.default.mat4;
 
 var PMATRIX = Symbol('pmatrix');
 
@@ -840,7 +1086,7 @@ var Camera = function (_Node) {
 
     var _this = _possibleConstructorReturn(this, (Camera.__proto__ || Object.getPrototypeOf(Camera)).call(this));
 
-    _this[PMATRIX] = mat4.create();
+    _this[PMATRIX] = new _math.Matrix4();
     _this.fov = fov;
     _this.aspect = aspect;
     _this.near = near;
@@ -858,8 +1104,7 @@ var Camera = function (_Node) {
   }, {
     key: 'updateProjectionMatrix',
     value: function updateProjectionMatrix() {
-      mat4.perspective(this[PMATRIX], this.fov, this.aspect, this.near, this.far);
-      return this[PMATRIX];
+      return this[PMATRIX].perspective(this.fov, this.aspect, this.near, this.far);
     }
   }]);
 
@@ -881,9 +1126,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _glMatrix = __webpack_require__(2);
-
-var _glMatrix2 = _interopRequireDefault(_glMatrix);
+var _math = __webpack_require__(2);
 
 var _webgl = __webpack_require__(22);
 
@@ -892,8 +1135,6 @@ var _webgl2 = _interopRequireDefault(_webgl);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var mat4 = _glMatrix2.default.mat4;
 
 var Renderer = function () {
   function Renderer(canvas) {
@@ -922,8 +1163,8 @@ var Renderer = function () {
     this.gl.setSize(canvas.width, canvas.height);
 
     // Temp matrices during render
-    this._mvMatrix = mat4.create();
-    this._mMatrix = mat4.create();
+    this._mvMatrix = new _math.Matrix4();
+    this._mMatrix = new _math.Matrix4();
   }
 
   _createClass(Renderer, [{
@@ -942,38 +1183,53 @@ var Renderer = function () {
       var gl = this.gl;
 
       var pMatrix = camera.getPerspectiveMatrix();
-      var vMatrix = camera.getMatrix();
+      var vMatrix = camera.getWorldMatrix();
 
       // Clear out the canvas
       gl.clear();
 
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
+      var queue = [scene];
 
-      try {
-        for (var _iterator = scene.getChildren()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var node = _step.value;
+      while (queue.length) {
+        var node = queue.shift();
 
-          var mMatrix = node.getMatrix();
+        // Get and construct our model and model view matrices
+        var mMatrix = node.getWorldMatrix();
+        var mvMatrix = this._mvMatrix;
+        _math.Matrix4.multiply(mvMatrix.identity(), vMatrix, mMatrix);
 
-          var mvMatrix = this._mvMatrix;
-          mat4.identity(mvMatrix);
-          mat4.multiply(mvMatrix, vMatrix, mMatrix);
-
+        // If we have a model, pass it to the GLWrapper
+        // to draw
+        if (node.isModel) {
           this.gl.draw(node.geometry, node.material, mMatrix, mvMatrix, pMatrix, vMatrix);
         }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
+
+        // If this node has children, push them into the queue
+        if (node.hasChildren()) {
+          var children = node.getChildren();
+          var _iteratorNormalCompletion = true;
+          var _didIteratorError = false;
+          var _iteratorError = undefined;
+
+          try {
+            for (var _iterator = children[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+              var child = _step.value;
+
+              queue.push(child);
+            }
+          } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+          } finally {
+            try {
+              if (!_iteratorNormalCompletion && _iterator.return) {
+                _iterator.return();
+              }
+            } finally {
+              if (_didIteratorError) {
+                throw _iteratorError;
+              }
+            }
           }
         }
       }
@@ -3440,19 +3696,17 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _glMatrix = __webpack_require__(2);
-
-var _glMatrix2 = _interopRequireDefault(_glMatrix);
+var _math = __webpack_require__(2);
 
 var _material = __webpack_require__(19);
 
 var _material2 = _interopRequireDefault(_material);
 
-var _basic = __webpack_require__(34);
+var _basic = __webpack_require__(35);
 
 var _basic2 = _interopRequireDefault(_basic);
 
-var _basic3 = __webpack_require__(33);
+var _basic3 = __webpack_require__(34);
 
 var _basic4 = _interopRequireDefault(_basic3);
 
@@ -3464,13 +3718,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var vec4 = _glMatrix2.default.vec4;
+var createDefaultAttributes = function createDefaultAttributes() {
+  return {};
+};
 
-
-var DEFAULT_ATTRIBS = {};
-
-var DEFAULT_UNIFORMS = {
-  color: vec4.set(vec4.create(), 0, 1, 0, 1)
+// Create a new instance of the underlying Vector4 data
+// so materials can have unique uniforms, or shared if
+// supplying its own uniform Vector.
+var createDefaultUniforms = function createDefaultUniforms() {
+  return {
+    color: new _math.Vector4(1, 1, 1, 1)
+  };
 };
 
 var BasicMaterial = function (_Material) {
@@ -3482,7 +3740,9 @@ var BasicMaterial = function (_Material) {
 
     _classCallCheck(this, BasicMaterial);
 
-    return _possibleConstructorReturn(this, (BasicMaterial.__proto__ || Object.getPrototypeOf(BasicMaterial)).call(this, _basic2.default, _basic4.default, Object.assign({}, DEFAULT_UNIFORMS, uniforms), Object.assign({}, DEFAULT_ATTRIBS, attributes)));
+    return _possibleConstructorReturn(this, (BasicMaterial.__proto__ || Object.getPrototypeOf(BasicMaterial)).call(this, _basic2.default, _basic4.default,
+    // TODO lazily create defaults if needed
+    Object.assign({}, createDefaultUniforms(), uniforms), Object.assign({}, createDefaultAttributes(), attributes)));
   }
 
   return BasicMaterial;
@@ -3500,8 +3760,6 @@ exports.default = BasicMaterial;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _node = __webpack_require__(3);
 
@@ -3525,40 +3783,9 @@ var Model = function (_Node) {
 
     _this.geometry = geometry;
     _this.material = material;
+    _this.isModel = true;
     return _this;
   }
-
-  _createClass(Model, [{
-    key: 'add',
-    value: function add(object) {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!object instanceof Scene) {
-        throw new Error('not yet implemented');
-      }
-      this[CHILDREN].add(object);
-    }
-  }, {
-    key: 'remove',
-    value: function remove(object) {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!object instanceof Scene) {
-        throw new Error('not yet implemented');
-      }
-      this[CHILDREN].delete(object);
-    }
-  }, {
-    key: 'getChildren',
-    value: function getChildren() {
-      // Not yet implementing mapping local space
-      // to world space based on ancestry in scene graph
-      if (!object instanceof Scene) {
-        throw new Error('not yet implemented');
-      }
-      return this[CHILDREN].values();
-    }
-  }]);
 
   return Model;
 }(_node2.default);
@@ -3643,7 +3870,11 @@ exports.default = Scene;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Triangle = exports.BasicMaterial = exports.Model = exports.Scene = exports.Cube = exports.Camera = exports.Renderer = undefined;
+exports.Triangle = exports.BasicMaterial = exports.Model = exports.Scene = exports.Cube = exports.Camera = exports.Renderer = exports.Math = exports.assert = undefined;
+
+var _assert = __webpack_require__(1);
+
+var _assert2 = _interopRequireDefault(_assert);
 
 var _renderer = __webpack_require__(5);
 
@@ -3656,6 +3887,10 @@ var _camera2 = _interopRequireDefault(_camera);
 var _scene = __webpack_require__(17);
 
 var _scene2 = _interopRequireDefault(_scene);
+
+var _math = __webpack_require__(2);
+
+var Math = _interopRequireWildcard(_math);
 
 var _model = __webpack_require__(16);
 
@@ -3673,8 +3908,12 @@ var _cube = __webpack_require__(13);
 
 var _cube2 = _interopRequireDefault(_cube);
 
+function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+exports.assert = _assert2.default;
+exports.Math = Math;
 exports.Renderer = _renderer2.default;
 exports.Camera = _camera2.default;
 exports.Cube = _cube2.default;
@@ -3697,11 +3936,11 @@ exports.standardAttribs = exports.standardUniforms = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _base = __webpack_require__(32);
+var _base = __webpack_require__(33);
 
 var _base2 = _interopRequireDefault(_base);
 
-var _base3 = __webpack_require__(31);
+var _base3 = __webpack_require__(32);
 
 var _base4 = _interopRequireDefault(_base3);
 
@@ -3888,9 +4127,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _program = __webpack_require__(23);
+var _programs = __webpack_require__(39);
 
-var _program2 = _interopRequireDefault(_program);
+var _programs2 = _interopRequireDefault(_programs);
 
 var _glBuffers = __webpack_require__(21);
 
@@ -3906,7 +4145,7 @@ var GLWrapper = function () {
 
     this.gl = gl;
     this.buffers = new _glBuffers2.default(gl);
-    this.programs = new Map();
+    this.programs = new _programs2.default(gl);
     this.width = width;
     this.height = height;
   }
@@ -3928,6 +4167,16 @@ var GLWrapper = function () {
       gl.viewport(0, 0, this.width, this.height);
       gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
     }
+
+    /**
+     * @param {Geometry} geometry
+     * @param {Material} material
+     * @param {Matrix4} mMatrix
+     * @param {Matrix4} mvMatrix
+     * @param {Matrix4} pMatrix
+     * @param {Matrix4} vMatrix
+     */
+
   }, {
     key: 'draw',
     value: function draw(geometry, material, mMatrix, mvMatrix, pMatrix, vMatrix) {
@@ -3940,12 +4189,9 @@ var GLWrapper = function () {
 
       // Get the Program abstraction associated with this material,
       // or create one, which handles the compiling/linking of
-      // shaders and setting up of uniforms
-      var program = this.programs.get(material);
-      if (!program) {
-        program = new _program2.default(this.gl, this.buffers, material.getVertexSource(), material.getFragmentSource());
-        this.programs.set(material, program);
-      }
+      // shaders and setting up of uniforms. Reuses programs even if Material
+      // instances are not identical based off of frag/vert source.
+      var program = this.programs.getProgram(material);
 
       // Start using this program for all future calls
       program.use();
@@ -4084,17 +4330,18 @@ var FS = Symbol('fs');
 var Program = function () {
   /**
    * @param {WebGLRenderingContext} gl
-   * @param {GLBuffers} buffers
    * @param {String} vertSrc
    * @param {String} fragSrc
    */
-  function Program(gl, buffers, vertSrc, fragSrc) {
+  function Program(gl, vertSrc, fragSrc) {
     _classCallCheck(this, Program);
 
     this.gl = gl;
-    this.buffers = buffers;
 
     this[PROGRAM] = gl.createProgram();
+
+    this.vertSrc = vertSrc;
+    this.fragSrc = fragSrc;
 
     this[VS] = this._createShader(vertSrc, gl.VERTEX_SHADER);
     this[FS] = this._createShader(fragSrc, gl.FRAGMENT_SHADER);
@@ -4112,6 +4359,16 @@ var Program = function () {
     key: 'use',
     value: function use() {
       this.gl.useProgram(this[PROGRAM]);
+    }
+  }, {
+    key: 'getVertexSource',
+    value: function getVertexSource() {
+      return this.vertSrc;
+    }
+  }, {
+    key: 'getFragmentSource',
+    value: function getFragmentSource() {
+      return this.fragSrc;
     }
   }, {
     key: 'setUniform',
@@ -4243,6 +4500,14 @@ var Uniform = function (_Register) {
           loc = this.loc,
           type = this.type;
 
+      // Check if this is a Math type of ours to extract
+      // the typed array data
+
+      if (value && (value.isVector || value.isMatrix)) {
+        // Continue setting values with the underlying
+        // TypedArray
+        value = value.getArray();
+      }
 
       switch (type) {
         case gl.INT:
@@ -4290,6 +4555,48 @@ exports.default = Uniform;
 
 /***/ }),
 /* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/**
+ * @fileoverview gl-matrix - High performance matrix and vector operations
+ * @author Brandon Jones
+ * @author Colin MacKenzie IV
+ * @version 2.3.2
+ */
+
+/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE. */
+// END HEADER
+
+exports.glMatrix = __webpack_require__(0);
+exports.mat2 = __webpack_require__(26);
+exports.mat2d = __webpack_require__(27);
+exports.mat3 = __webpack_require__(9);
+exports.mat4 = __webpack_require__(28);
+exports.quat = __webpack_require__(29);
+exports.vec2 = __webpack_require__(30);
+exports.vec3 = __webpack_require__(10);
+exports.vec4 = __webpack_require__(11);
+
+/***/ }),
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -4731,7 +5038,7 @@ module.exports = mat2;
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -5206,7 +5513,7 @@ module.exports = mat2d;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -7348,7 +7655,7 @@ module.exports = mat4;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -7954,7 +8261,7 @@ module.exports = quat;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -8547,7 +8854,7 @@ module.exports = vec2;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -8737,31 +9044,31 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 module.exports = "precision mediump float;\n#define GLSLIFY 1\n\n// uniform mat4 viewMatrix;\n// uniform vec3 cameraPosition;\n"
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = "precision mediump float;\n#define GLSLIFY 1\n\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\n// uniform mat3 normalMatrix;\n// uniform vec3 cameraPosition;\n\nattribute vec3 position;\n// attribute vec3 normal;\n// attribute vec2 uv;\n"
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = "#define GLSLIFY 1\nuniform vec4 color;\n\nvoid main(void) {\n  gl_FragColor = color;\n}\n"
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = "#define GLSLIFY 1\nvoid main(void) {\n  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n}\n"
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create === 'function') {
@@ -8790,7 +9097,7 @@ if (typeof Object.create === 'function') {
 
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = function isBuffer(arg) {
@@ -8801,7 +9108,7 @@ module.exports = function isBuffer(arg) {
 }
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -9329,7 +9636,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = __webpack_require__(36);
+exports.isBuffer = __webpack_require__(37);
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -9373,7 +9680,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = __webpack_require__(35);
+exports.inherits = __webpack_require__(36);
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -9391,7 +9698,108 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(30)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(31)))
+
+/***/ }),
+/* 39 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assert = __webpack_require__(1);
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _program2 = __webpack_require__(23);
+
+var _program3 = _interopRequireDefault(_program2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PROGRAMS = Symbol('programs');
+
+var Programs = function () {
+  /**
+   * @param {WebGLRenderingContext} gl
+   */
+  function Programs(gl) {
+    _classCallCheck(this, Programs);
+
+    this.gl = gl;
+    this[PROGRAMS] = new Map();
+  }
+
+  /**
+   * @param {Material} material
+   * @return {Program}
+   */
+
+
+  _createClass(Programs, [{
+    key: 'getProgram',
+    value: function getProgram(material) {
+
+      // Get the program from the cache if we've seen this
+      // material before
+      if (this[PROGRAMS].has(material)) {
+        return this[PROGRAMS].get(material);
+      }
+
+      var vertSrc = material.getVertexSource();
+      var fragSrc = material.getFragmentSource();
+
+      // Otherwise, check to see if the frag and vert shaders
+      // are the same as another program already in the cache;
+      // this can occur when we use default materials,
+      // creating new instances so each instance has its own
+      // uniforms, but still should use the same underlying program/shaders.
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this[PROGRAMS].values()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _program = _step.value;
+
+          if (_program.getVertexSource() === vertSrc && _program.getFragmentSource() === fragSrc) {
+            this[PROGRAMS].set(material, _program);
+            return _program;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      var program = new _program3.default(gl, vertSrc, fragSrc);
+      this[PROGRAMS].set(material, program);
+      return program;
+    }
+  }]);
+
+  return Programs;
+}();
+
+exports.default = Programs;
 
 /***/ })
 /******/ ]);
