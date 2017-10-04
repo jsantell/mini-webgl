@@ -40,7 +40,7 @@ export default class Programs {
       }
     }
 
-    const program = new Program(gl, vertSrc, fragSrc);
+    const program = new Program(this.gl, vertSrc, fragSrc);
     this[PROGRAMS].set(material, program);
     return program;
   }
