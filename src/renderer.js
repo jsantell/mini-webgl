@@ -1,3 +1,4 @@
+import { mat4 } from 'gl-matrix';
 import { Matrix4 } from './math';
 import GLWrapper from './webgl';
 
@@ -46,6 +47,7 @@ export default class Renderer {
     const { gl } = this;
     const pMatrix = camera.getPerspectiveMatrix();
     const vMatrix = camera.getWorldMatrix();
+    mat4.invert(vMatrix, vMatrix);
 
     // Clear out the canvas
     gl.clear();
