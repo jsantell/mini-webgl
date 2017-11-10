@@ -1,5 +1,14 @@
-var MiniWebGL =
-/******/ (function(modules) { // webpackBootstrap
+(function webpackUniversalModuleDefinition(root, factory) {
+	if(typeof exports === 'object' && typeof module === 'object')
+		module.exports = factory();
+	else if(typeof define === 'function' && define.amd)
+		define([], factory);
+	else if(typeof exports === 'object')
+		exports["MiniWebGL"] = factory();
+	else
+		root["MiniWebGL"] = factory();
+})(this, function() {
+return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 /******/
@@ -3883,7 +3892,7 @@ exports.default = Scene;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Triangle = exports.BasicMaterial = exports.Model = exports.Scene = exports.Cube = exports.Camera = exports.Renderer = exports.Math = exports.assert = undefined;
+exports.BasicMaterial = exports.Triangle = exports.Node = exports.Model = exports.Scene = exports.Cube = exports.Camera = exports.Renderer = exports.Math = exports.assert = undefined;
 
 var _assert = __webpack_require__(0);
 
@@ -3917,6 +3926,10 @@ var _triangle = __webpack_require__(14);
 
 var _triangle2 = _interopRequireDefault(_triangle);
 
+var _node = __webpack_require__(3);
+
+var _node2 = _interopRequireDefault(_node);
+
 var _cube = __webpack_require__(13);
 
 var _cube2 = _interopRequireDefault(_cube);
@@ -3932,8 +3945,9 @@ exports.Camera = _camera2.default;
 exports.Cube = _cube2.default;
 exports.Scene = _scene2.default;
 exports.Model = _model2.default;
-exports.BasicMaterial = _basicMaterial2.default;
+exports.Node = _node2.default;
 exports.Triangle = _triangle2.default;
+exports.BasicMaterial = _basicMaterial2.default;
 
 /***/ }),
 /* 19 */
@@ -9816,3 +9830,4 @@ function hasOwnProperty(obj, prop) {
 
 /***/ })
 /******/ ]);
+});

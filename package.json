@@ -1,8 +1,8 @@
 {
   "name": "@jsantell/mini-webgl",
-  "version": "1.0.0",
+  "version": "1.0.4",
   "description": "Mini toy WebGL library",
-  "main": "index.js",
+  "main": "dist/mini-webgl.js",
   "scripts": {
     "build": "webpack"
   },
