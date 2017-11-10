@@ -69,82 +69,6 @@ var MiniWebGL =
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ (function(module, exports) {
-
-/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE. */
-
-/**
- * @class Common utilities
- * @name glMatrix
- */
-var glMatrix = {};
-
-// Configuration Constants
-glMatrix.EPSILON = 0.000001;
-glMatrix.ARRAY_TYPE = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
-glMatrix.RANDOM = Math.random;
-glMatrix.ENABLE_SIMD = false;
-
-// Capability detection
-glMatrix.SIMD_AVAILABLE = (glMatrix.ARRAY_TYPE === Float32Array) && ('SIMD' in this);
-glMatrix.USE_SIMD = glMatrix.ENABLE_SIMD && glMatrix.SIMD_AVAILABLE;
-
-/**
- * Sets the type of array used when creating new vectors and matrices
- *
- * @param {Type} type Array type, such as Float32Array or Array
- */
-glMatrix.setMatrixArrayType = function(type) {
-    glMatrix.ARRAY_TYPE = type;
-}
-
-var degree = Math.PI / 180;
-
-/**
-* Convert Degree To Radian
-*
-* @param {Number} Angle in Degrees
-*/
-glMatrix.toRadian = function(a){
-     return a * degree;
-}
-
-/**
- * Tests whether or not the arguments have approximately the same value, within an absolute
- * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less 
- * than or equal to 1.0, and a relative tolerance is used for larger values)
- * 
- * @param {Number} a The first number to test.
- * @param {Number} b The second number to test.
- * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
- */
-glMatrix.equals = function(a, b) {
-	return Math.abs(a - b) <= glMatrix.EPSILON*Math.max(1.0, Math.abs(a), Math.abs(b));
-}
-
-module.exports = glMatrix;
-
-
-/***/ }),
-/* 1 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -216,7 +140,7 @@ function isBuffer(b) {
 // ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-var util = __webpack_require__(38);
+var util = __webpack_require__(39);
 var hasOwn = Object.prototype.hasOwnProperty;
 var pSlice = Array.prototype.slice;
 var functionsHaveNames = (function () {
@@ -642,6 +566,82 @@ var objectKeys = Object.keys || function (obj) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12)))
 
 /***/ }),
+/* 1 */
+/***/ (function(module, exports) {
+
+/* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE. */
+
+/**
+ * @class Common utilities
+ * @name glMatrix
+ */
+var glMatrix = {};
+
+// Configuration Constants
+glMatrix.EPSILON = 0.000001;
+glMatrix.ARRAY_TYPE = (typeof Float32Array !== 'undefined') ? Float32Array : Array;
+glMatrix.RANDOM = Math.random;
+glMatrix.ENABLE_SIMD = false;
+
+// Capability detection
+glMatrix.SIMD_AVAILABLE = (glMatrix.ARRAY_TYPE === Float32Array) && ('SIMD' in this);
+glMatrix.USE_SIMD = glMatrix.ENABLE_SIMD && glMatrix.SIMD_AVAILABLE;
+
+/**
+ * Sets the type of array used when creating new vectors and matrices
+ *
+ * @param {Type} type Array type, such as Float32Array or Array
+ */
+glMatrix.setMatrixArrayType = function(type) {
+    glMatrix.ARRAY_TYPE = type;
+}
+
+var degree = Math.PI / 180;
+
+/**
+* Convert Degree To Radian
+*
+* @param {Number} Angle in Degrees
+*/
+glMatrix.toRadian = function(a){
+     return a * degree;
+}
+
+/**
+ * Tests whether or not the arguments have approximately the same value, within an absolute
+ * or relative tolerance of glMatrix.EPSILON (an absolute tolerance is used for values less 
+ * than or equal to 1.0, and a relative tolerance is used for larger values)
+ * 
+ * @param {Number} a The first number to test.
+ * @param {Number} b The second number to test.
+ * @returns {Boolean} True if the numbers are approximately equal, false otherwise.
+ */
+glMatrix.equals = function(a, b) {
+	return Math.abs(a - b) <= glMatrix.EPSILON*Math.max(1.0, Math.abs(a), Math.abs(b));
+}
+
+module.exports = glMatrix;
+
+
+/***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -655,11 +655,11 @@ exports.Matrix4 = exports.Matrix3 = exports.Matrix2 = exports.Matrix = exports.V
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
-var _glMatrix = __webpack_require__(25);
+var _glMatrix = __webpack_require__(26);
 
 var _glMatrix2 = _interopRequireDefault(_glMatrix);
 
@@ -922,6 +922,12 @@ var Matrix4 = exports.Matrix4 = function (_Matrix3) {
       mat4.multiply(out.getArray(), a.getArray(), b.getArray());
       return out;
     }
+  }, {
+    key: 'invert',
+    value: function invert(out, a) {
+      mat4.invert(out.getArray(), a.getArray());
+      return out;
+    }
   }]);
 
   return Matrix4;
@@ -940,7 +946,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -1072,6 +1078,7 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 var PMATRIX = Symbol('pmatrix');
+var IMATRIX = Symbol('imatrix');
 
 var Camera = function (_Node) {
   _inherits(Camera, _Node);
@@ -1080,13 +1087,14 @@ var Camera = function (_Node) {
     var fov = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 45;
     var aspect = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
     var near = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0.01;
-    var far = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 20000;
+    var far = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 1000;
 
     _classCallCheck(this, Camera);
 
     var _this = _possibleConstructorReturn(this, (Camera.__proto__ || Object.getPrototypeOf(Camera)).call(this));
 
     _this[PMATRIX] = new _math.Matrix4();
+    _this[IMATRIX] = new _math.Matrix4();
     _this.fov = fov;
     _this.aspect = aspect;
     _this.near = near;
@@ -1097,9 +1105,14 @@ var Camera = function (_Node) {
   }
 
   _createClass(Camera, [{
-    key: 'getPerspectiveMatrix',
-    value: function getPerspectiveMatrix() {
+    key: 'getProjectionMatrix',
+    value: function getProjectionMatrix() {
       return this[PMATRIX];
+    }
+  }, {
+    key: 'getInverseWorldMatrix',
+    value: function getInverseWorldMatrix() {
+      return _math.Matrix4.invert(this[IMATRIX].identity(), this.getWorldMatrix());
     }
   }, {
     key: 'updateProjectionMatrix',
@@ -1182,8 +1195,8 @@ var Renderer = function () {
     value: function render(scene, camera) {
       var gl = this.gl;
 
-      var pMatrix = camera.getPerspectiveMatrix();
-      var vMatrix = camera.getWorldMatrix();
+      var pMatrix = camera.getProjectionMatrix();
+      var vMatrix = camera.getInverseWorldMatrix();
 
       // Clear out the canvas
       gl.clear();
@@ -1307,7 +1320,7 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -1337,7 +1350,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -1422,7 +1435,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 3x3 Matrix
@@ -2174,7 +2187,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 3 Dimensional Vector
@@ -2957,7 +2970,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 4 Dimensional Vector
@@ -3702,11 +3715,11 @@ var _material = __webpack_require__(19);
 
 var _material2 = _interopRequireDefault(_material);
 
-var _basic = __webpack_require__(35);
+var _basic = __webpack_require__(36);
 
 var _basic2 = _interopRequireDefault(_basic);
 
-var _basic3 = __webpack_require__(34);
+var _basic3 = __webpack_require__(35);
 
 var _basic4 = _interopRequireDefault(_basic3);
 
@@ -3872,7 +3885,7 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.Triangle = exports.BasicMaterial = exports.Model = exports.Scene = exports.Cube = exports.Camera = exports.Renderer = exports.Math = exports.assert = undefined;
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -3936,11 +3949,11 @@ exports.standardAttribs = exports.standardUniforms = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _base = __webpack_require__(33);
+var _base = __webpack_require__(34);
 
 var _base2 = _interopRequireDefault(_base);
 
-var _base3 = __webpack_require__(32);
+var _base3 = __webpack_require__(33);
 
 var _base4 = _interopRequireDefault(_base3);
 
@@ -4005,7 +4018,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -4127,7 +4140,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _programs = __webpack_require__(39);
+var _programs = __webpack_require__(24);
 
 var _programs2 = _interopRequireDefault(_programs);
 
@@ -4307,11 +4320,11 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
-var _uniform = __webpack_require__(24);
+var _uniform = __webpack_require__(25);
 
 var _uniform2 = _interopRequireDefault(_uniform);
 
@@ -4463,7 +4476,108 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-var _assert = __webpack_require__(1);
+var _assert = __webpack_require__(0);
+
+var _assert2 = _interopRequireDefault(_assert);
+
+var _program2 = __webpack_require__(23);
+
+var _program3 = _interopRequireDefault(_program2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var PROGRAMS = Symbol('programs');
+
+var Programs = function () {
+  /**
+   * @param {WebGLRenderingContext} gl
+   */
+  function Programs(gl) {
+    _classCallCheck(this, Programs);
+
+    this.gl = gl;
+    this[PROGRAMS] = new Map();
+  }
+
+  /**
+   * @param {Material} material
+   * @return {Program}
+   */
+
+
+  _createClass(Programs, [{
+    key: 'getProgram',
+    value: function getProgram(material) {
+
+      // Get the program from the cache if we've seen this
+      // material before
+      if (this[PROGRAMS].has(material)) {
+        return this[PROGRAMS].get(material);
+      }
+
+      var vertSrc = material.getVertexSource();
+      var fragSrc = material.getFragmentSource();
+
+      // Otherwise, check to see if the frag and vert shaders
+      // are the same as another program already in the cache;
+      // this can occur when we use default materials,
+      // creating new instances so each instance has its own
+      // uniforms, but still should use the same underlying program/shaders.
+      var _iteratorNormalCompletion = true;
+      var _didIteratorError = false;
+      var _iteratorError = undefined;
+
+      try {
+        for (var _iterator = this[PROGRAMS].values()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+          var _program = _step.value;
+
+          if (_program.getVertexSource() === vertSrc && _program.getFragmentSource() === fragSrc) {
+            this[PROGRAMS].set(material, _program);
+            return _program;
+          }
+        }
+      } catch (err) {
+        _didIteratorError = true;
+        _iteratorError = err;
+      } finally {
+        try {
+          if (!_iteratorNormalCompletion && _iterator.return) {
+            _iterator.return();
+          }
+        } finally {
+          if (_didIteratorError) {
+            throw _iteratorError;
+          }
+        }
+      }
+
+      var program = new _program3.default(this.gl, vertSrc, fragSrc);
+      this[PROGRAMS].set(material, program);
+      return program;
+    }
+  }]);
+
+  return Programs;
+}();
+
+exports.default = Programs;
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _assert = __webpack_require__(0);
 
 var _assert2 = _interopRequireDefault(_assert);
 
@@ -4554,7 +4668,7 @@ var Uniform = function (_Register) {
 exports.default = Uniform;
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /**
@@ -4585,18 +4699,18 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 // END HEADER
 
-exports.glMatrix = __webpack_require__(0);
-exports.mat2 = __webpack_require__(26);
-exports.mat2d = __webpack_require__(27);
+exports.glMatrix = __webpack_require__(1);
+exports.mat2 = __webpack_require__(27);
+exports.mat2d = __webpack_require__(28);
 exports.mat3 = __webpack_require__(9);
-exports.mat4 = __webpack_require__(28);
-exports.quat = __webpack_require__(29);
-exports.vec2 = __webpack_require__(30);
+exports.mat4 = __webpack_require__(29);
+exports.quat = __webpack_require__(30);
+exports.vec2 = __webpack_require__(31);
 exports.vec3 = __webpack_require__(10);
 exports.vec4 = __webpack_require__(11);
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -4619,7 +4733,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 2x2 Matrix
@@ -5038,7 +5152,7 @@ module.exports = mat2;
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -5061,7 +5175,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 2x3 Matrix
@@ -5513,7 +5627,7 @@ module.exports = mat2d;
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -5536,7 +5650,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 4x4 Matrix
@@ -7655,7 +7769,7 @@ module.exports = mat4;
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -7678,7 +7792,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 var mat3 = __webpack_require__(9);
 var vec3 = __webpack_require__(10);
 var vec4 = __webpack_require__(11);
@@ -8261,7 +8375,7 @@ module.exports = quat;
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Copyright (c) 2015, Brandon Jones, Colin MacKenzie IV.
@@ -8284,7 +8398,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE. */
 
-var glMatrix = __webpack_require__(0);
+var glMatrix = __webpack_require__(1);
 
 /**
  * @class 2 Dimensional Vector
@@ -8854,7 +8968,7 @@ module.exports = vec2;
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports) {
 
 // shim for using process in browser
@@ -9044,31 +9158,31 @@ process.umask = function() { return 0; };
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 module.exports = "precision mediump float;\n#define GLSLIFY 1\n\n// uniform mat4 viewMatrix;\n// uniform vec3 cameraPosition;\n"
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = "precision mediump float;\n#define GLSLIFY 1\n\nuniform mat4 modelMatrix;\nuniform mat4 modelViewMatrix;\nuniform mat4 projectionMatrix;\nuniform mat4 viewMatrix;\n// uniform mat3 normalMatrix;\n// uniform vec3 cameraPosition;\n\nattribute vec3 position;\n// attribute vec3 normal;\n// attribute vec2 uv;\n"
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = "#define GLSLIFY 1\nuniform vec4 color;\n\nvoid main(void) {\n  gl_FragColor = color;\n}\n"
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports) {
 
 module.exports = "#define GLSLIFY 1\nvoid main(void) {\n  gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);\n}\n"
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 if (typeof Object.create === 'function') {
@@ -9097,7 +9211,7 @@ if (typeof Object.create === 'function') {
 
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports) {
 
 module.exports = function isBuffer(arg) {
@@ -9108,7 +9222,7 @@ module.exports = function isBuffer(arg) {
 }
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -9636,7 +9750,7 @@ function isPrimitive(arg) {
 }
 exports.isPrimitive = isPrimitive;
 
-exports.isBuffer = __webpack_require__(37);
+exports.isBuffer = __webpack_require__(38);
 
 function objectToString(o) {
   return Object.prototype.toString.call(o);
@@ -9680,7 +9794,7 @@ exports.log = function() {
  *     prototype.
  * @param {function} superCtor Constructor function to inherit prototype from.
  */
-exports.inherits = __webpack_require__(36);
+exports.inherits = __webpack_require__(37);
 
 exports._extend = function(origin, add) {
   // Don't do anything if add isn't an object
@@ -9698,108 +9812,7 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(31)))
-
-/***/ }),
-/* 39 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _assert = __webpack_require__(1);
-
-var _assert2 = _interopRequireDefault(_assert);
-
-var _program2 = __webpack_require__(23);
-
-var _program3 = _interopRequireDefault(_program2);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var PROGRAMS = Symbol('programs');
-
-var Programs = function () {
-  /**
-   * @param {WebGLRenderingContext} gl
-   */
-  function Programs(gl) {
-    _classCallCheck(this, Programs);
-
-    this.gl = gl;
-    this[PROGRAMS] = new Map();
-  }
-
-  /**
-   * @param {Material} material
-   * @return {Program}
-   */
-
-
-  _createClass(Programs, [{
-    key: 'getProgram',
-    value: function getProgram(material) {
-
-      // Get the program from the cache if we've seen this
-      // material before
-      if (this[PROGRAMS].has(material)) {
-        return this[PROGRAMS].get(material);
-      }
-
-      var vertSrc = material.getVertexSource();
-      var fragSrc = material.getFragmentSource();
-
-      // Otherwise, check to see if the frag and vert shaders
-      // are the same as another program already in the cache;
-      // this can occur when we use default materials,
-      // creating new instances so each instance has its own
-      // uniforms, but still should use the same underlying program/shaders.
-      var _iteratorNormalCompletion = true;
-      var _didIteratorError = false;
-      var _iteratorError = undefined;
-
-      try {
-        for (var _iterator = this[PROGRAMS].values()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-          var _program = _step.value;
-
-          if (_program.getVertexSource() === vertSrc && _program.getFragmentSource() === fragSrc) {
-            this[PROGRAMS].set(material, _program);
-            return _program;
-          }
-        }
-      } catch (err) {
-        _didIteratorError = true;
-        _iteratorError = err;
-      } finally {
-        try {
-          if (!_iteratorNormalCompletion && _iterator.return) {
-            _iterator.return();
-          }
-        } finally {
-          if (_didIteratorError) {
-            throw _iteratorError;
-          }
-        }
-      }
-
-      var program = new _program3.default(gl, vertSrc, fragSrc);
-      this[PROGRAMS].set(material, program);
-      return program;
-    }
-  }]);
-
-  return Programs;
-}();
-
-exports.default = Programs;
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(12), __webpack_require__(32)))
 
 /***/ })
 /******/ ]);

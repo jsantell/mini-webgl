@@ -1,5 +1,5 @@
 {
-  "name": "mini-webgl",
+  "name": "@jsantell/mini-webgl",
   "version": "1.0.0",
   "description": "Mini toy WebGL library",
   "main": "index.js",

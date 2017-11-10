@@ -159,6 +159,11 @@ export class Matrix4 extends Matrix {
     return out;
   }
 
+  static invert(out, a) {
+    mat4.invert(out.getArray(), a.getArray());
+    return out;
+  }
+
   perspective(fov, aspect, near, far) {
     mat4.perspective(this.data, fov, aspect, near, far);
     return this;
